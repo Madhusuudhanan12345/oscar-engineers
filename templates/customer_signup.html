@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Customer Sign Up | Oscar Engineers</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #071e3d,
+                    #1261a0
+                );
+
+            padding: 20px;
+        }
+
+        .box {
+
+            width: 100%;
+
+            max-width: 480px;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.25);
+        }
+
+        h1 {
+
+            text-align: center;
+
+            color: #071e3d;
+
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #666;
+
+            margin-bottom: 25px;
+        }
+
+        label {
+
+            display: block;
+
+            font-weight: bold;
+
+            margin-top: 14px;
+
+            margin-bottom: 6px;
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: 1px solid #d5dbe5;
+
+            border-radius: 9px;
+
+            font-size: 15px;
+        }
+
+        input:focus {
+
+            outline: none;
+
+            border-color: #1261a0;
+        }
+
+        button {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 14px;
+
+            margin-top: 22px;
+
+            background: #159957;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+
+            background: #117a46;
+        }
+
+        .error {
+
+            background: #ffe5e5;
+
+            color: #c62828;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            margin-bottom: 15px;
+
+            text-align: center;
+        }
+
+        .links {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            line-height: 2;
+        }
+
+        a {
+
+            color: #1261a0;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        a:hover {
+
+            text-decoration: underline;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="box">
+
+    <h1>🔧 OSCAR ENGINEERS</h1>
+
+    <p class="subtitle">
+        Customer Registration
+    </p>
+
+
+    {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    <form
+        method="POST"
+        action="{{ url_for('customer_signup') }}"
+    >
+
+        <label>
+            Customer Name
+        </label>
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Enter your full name"
+            required
+        >
+
+
+        <label>
+            Mobile Number
+        </label>
+
+        <input
+            type="tel"
+            name="mobile"
+            placeholder="Enter mobile number"
+            required
+        >
+
+
+        <label>
+            Username
+        </label>
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Choose a username"
+            required
+        >
+
+
+        <label>
+            Password
+        </label>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Create password"
+            required
+        >
+
+
+        <label>
+            Confirm Password
+        </label>
+
+        <input
+            type="password"
+            name="confirm_password"
+            placeholder="Confirm password"
+            required
+        >
+
+
+        <button type="submit">
+            Create Customer Account
+        </button>
+
+    </form>
+
+
+    <div class="links">
+
+        Already have an account?
+
+        <a href="{{ url_for('customer_login') }}">
+            Customer Login
+        </a>
+
+        <br>
+
+        <a href="{{ url_for('home') }}">
+            ← Back to Home
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

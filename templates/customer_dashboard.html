@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Dashboard | Oscar Engineers</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f7fb;
+            color: #172033;
+        }
+
+        /* HEADER */
+
+        header {
+            background: linear-gradient(
+                135deg,
+                #071e3d,
+                #1261a0
+            );
+
+            color: white;
+
+            padding: 18px 6%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 22px;
+        }
+
+        .logout {
+            background: #e63946;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+
+        /* MAIN */
+
+        main {
+            width: 92%;
+
+            max-width: 1200px;
+
+            margin: 30px auto;
+        }
+
+        /* WELCOME */
+
+        .welcome {
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 10px;
+
+            color: #071e3d;
+        }
+
+        .welcome p {
+            color: #667085;
+        }
+
+        /* CARDS */
+
+        .grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.07);
+
+            text-align: center;
+
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .icon {
+            font-size: 45px;
+
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+
+            color: #071e3d;
+        }
+
+        .card p {
+            color: #667085;
+
+            line-height: 1.5;
+
+            margin-bottom: 18px;
+        }
+
+        .btn {
+            display: inline-block;
+
+            text-decoration: none;
+
+            background: #1261a0;
+
+            color: white;
+
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #071e3d;
+        }
+
+        .green {
+            background: #159957;
+        }
+
+        .orange {
+            background: #f39c12;
+        }
+
+        .purple {
+            background: #6c5ce7;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+
+            margin-top: 40px;
+
+            padding: 20px;
+
+            color: #667085;
+
+            font-size: 14px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 850px) {
+
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            header {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                width: 94%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <h1>
+        ❄️ OSCAR ENGINEERS
+    </h1>
+
+    <a
+        href="{{ url_for('logout') }}"
+        class="logout"
+    >
+        Logout
+    </a>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main>
+
+
+    <!-- WELCOME -->
+
+    <section class="welcome">
+
+        <h2>
+            Welcome, {{ name }} 👋
+        </h2>
+
+        <p>
+            Welcome to your Oscar Engineers Customer Dashboard.
+            Manage your AC service requests from here.
+        </p>
+
+    </section>
+
+
+    <!-- =================================================
+         CUSTOMER OPTIONS
+    ================================================== -->
+
+    <section class="grid">
+
+
+        <!-- BOOK SERVICE -->
+
+        <div class="card">
+
+            <div class="icon">
+                🛠️
+            </div>
+
+            <h3>
+                Book AC Service
+            </h3>
+
+            <p>
+                Book AC installation, service,
+                repair or maintenance.
+            </p>
+
+            <a
+                href="{{ url_for('book_service') }}"
+                class="btn green"
+            >
+                Book Service
+            </a>
+
+        </div>
+
+
+        <!-- TRACK BOOKING -->
+
+        <div class="card">
+
+            <div class="icon">
+                🔍
+            </div>
+
+            <h3>
+                Track Booking
+            </h3>
+
+            <p>
+                Check your booking status using
+                your Booking ID.
+            </p>
+
+            <a
+                href="{{ url_for('track_booking') }}"
+                class="btn"
+            >
+                Track Booking
+            </a>
+
+        </div>
+
+
+        <!-- MY SERVICES -->
+
+        <div class="card">
+
+            <div class="icon">
+                📋
+            </div>
+
+            <h3>
+                My Services
+            </h3>
+
+            <p>
+                View your previous and current
+                AC service requests.
+            </p>
+
+            <a
+                href="#"
+                class="btn orange"
+            >
+                My Services
+            </a>
+
+        </div>
+
+
+        <!-- HOME -->
+
+        <div class="card">
+
+            <div class="icon">
+                🏠
+            </div>
+
+            <h3>
+                Home
+            </h3>
+
+            <p>
+                Return to the Oscar Engineers
+                main website.
+            </p>
+
+            <a
+                href="{{ url_for('home') }}"
+                class="btn purple"
+            >
+                Go Home
+            </a>
+
+        </div>
+
+
+        <!-- CONTACT -->
+
+        <div class="card">
+
+            <div class="icon">
+                📞
+            </div>
+
+            <h3>
+                Contact Us
+            </h3>
+
+            <p>
+                Contact Oscar Engineers for
+                AC service and support.
+            </p>
+
+            <a
+                href="tel:+919999999999"
+                class="btn"
+            >
+                Call Now
+            </a>
+
+        </div>
+
+
+        <!-- LOGOUT -->
+
+        <div class="card">
+
+            <div class="icon">
+                🚪
+            </div>
+
+            <h3>
+                Logout
+            </h3>
+
+            <p>
+                Securely logout from your
+                customer account.
+            </p>
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn"
+            >
+                Logout
+            </a>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    © 2026 Oscar Engineers.
+    AC Service & Installation.
+
+</footer>
+
+
+</body>
+
+</html>

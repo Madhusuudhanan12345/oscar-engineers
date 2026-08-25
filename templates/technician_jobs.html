@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Technician Dashboard | OSCAR ENGINEERS</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #17202a;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: #07111f;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                #ffb300,
+                #ff6f00
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 24px;
+        }
+
+        .brand h2 {
+            font-size: 20px;
+        }
+
+        .logout {
+            text-decoration: none;
+            background: #ffb300;
+            color: #111;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        /* MAIN */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 30px;
+        }
+
+        .welcome p {
+            color: #687786;
+            margin-top: 8px;
+        }
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.07);
+        }
+
+        .stat-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .stat h2 {
+            font-size: 28px;
+        }
+
+        .stat p {
+            color: #71808f;
+            margin-top: 5px;
+        }
+
+        /* JOBS */
+
+        .jobs-box {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+
+            box-shadow:
+                0 5px 25px
+                rgba(0,0,0,0.07);
+        }
+
+        .jobs-title {
+            margin-bottom: 20px;
+        }
+
+        .jobs-title h2 {
+            font-size: 23px;
+        }
+
+        /* JOB CARD */
+
+        .job-card {
+            border: 1px solid #e3e8ee;
+            border-radius: 15px;
+            padding: 22px;
+            margin-bottom: 18px;
+
+            transition: 0.2s;
+        }
+
+        .job-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 5px 18px
+                rgba(0,0,0,0.08);
+        }
+
+        .job-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .booking-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e68900;
+        }
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .assigned {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .accepted {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .way {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .started {
+            background: #cffafe;
+            color: #0e7490;
+        }
+
+        .completed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        /* CUSTOMER */
+
+        .customer {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .customer h3 {
+            margin-bottom: 10px;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+
+            color: #4b5968;
+        }
+
+        /* SERVICE */
+
+        .service {
+            margin-bottom: 18px;
+        }
+
+        .service strong {
+            color: #111;
+        }
+
+        /* ACTION */
+
+        .action {
+            border-top: 1px solid #e8edf2;
+            padding-top: 18px;
+        }
+
+        .action form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        select {
+            padding: 10px;
+            border: 1px solid #ccd5df;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffb300,
+                    #ff6f00
+                );
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* EMPTY */
+
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #71808f;
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 900px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .brand h2 {
+                font-size: 16px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome h1 {
+                font-size: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="logo">
+            🐯
+        </div>
+
+        <h2>
+            OSCAR ENGINEERS
+        </h2>
+
+    </div>
+
+
+    <a
+        href="/logout"
+        class="logout">
+
+        Logout
+
+    </a>
+
+</header>
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <h1>
+            👨‍🔧 Welcome, {{ name }}
+        </h1>
+
+        <p>
+            Manage your assigned AC service jobs.
+        </p>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    {% set total = bookings|length %}
+
+    {% set assigned = bookings
+        |selectattr("status", "equalto", "Assigned")
+        |list
+        |length
+    %}
+
+    {% set way = bookings
+        |selectattr("status", "equalto", "On the Way")
+        |list
+        |length
+    %}
+
+    {% set completed = bookings
+        |selectattr("status", "equalto", "Completed")
+        |list
+        |length
+    %}
+
+
+    <div class="stats">
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                📋
+            </div>
+
+            <h2>
+                {{ total }}
+            </h2>
+
+            <p>
+                Total Jobs
+            </p>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                🔧
+            </div>
+
+            <h2>
+                {{ assigned }}
+            </h2>
+
+            <p>
+                Assigned
+            </p>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                🚗
+            </div>
+
+            <h2>
+                {{ way }}
+            </h2>
+
+            <p>
+                On the Way
+            </p>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                ✅
+            </div>
+
+            <h2>
+                {{ completed }}
+            </h2>
+
+            <p>
+                Completed
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- JOBS -->
+
+    <section class="jobs-box">
+
+
+        <div class="jobs-title">
+
+            <h2>
+                📋 My Service Jobs
+            </h2>
+
+        </div>
+
+
+        {% if bookings %}
+
+
+            {% for booking in bookings %}
+
+
+            <div class="job-card">
+
+
+                <!-- TOP -->
+
+                <div class="job-top">
+
+                    <div>
+
+                        <div class="booking-id">
+
+                            {{ booking["booking_id"] }}
+
+                        </div>
+
+                        <small>
+                            Booking created:
+                            {{ booking["created_at"] }}
+                        </small>
+
+                    </div>
+
+
+                    {% set status_class =
+                        booking["status"]
+                        |lower
+                        |replace(" ", "-")
+                    %}
+
+
+                    <span
+                        class="status {{ status_class }}">
+
+                        {{ booking["status"] }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- CUSTOMER -->
+
+                <div class="customer">
+
+                    <h3>
+                        👤 {{ booking["customer_name"] }}
+                    </h3>
+
+
+                    <div class="info">
+
+                        <div>
+                            📞
+                            <strong>
+                                Mobile:
+                            </strong>
+
+                            {{ booking["mobile"] }}
+                        </div>
+
+
+                        <div>
+                            📅
+                            <strong>
+                                Date:
+                            </strong>
+
+                            {{ booking["preferred_date"] }}
+                        </div>
+
+
+                        <div>
+                            🕐
+                            <strong>
+                                Time:
+                            </strong>
+
+                            {{ booking["preferred_time"] }}
+                        </div>
+
+
+                        <div>
+                            ❄️
+                            <strong>
+                                AC:
+                            </strong>
+
+                            {{ booking["ac_brand"] }}
+                            -
+                            {{ booking["ac_type"] }}
+                        </div>
+
+
+                    </div>
+
+
+                    <br>
+
+
+                    <div>
+
+                        📍
+                        <strong>
+                            Address:
+                        </strong>
+
+                        {{ booking["address"] }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- SERVICE -->
+
+                <div class="service">
+
+                    🔧
+                    <strong>
+                        Service:
+                    </strong>
+
+                    {{ booking["service_type"] }}
+
+
+                    {% if booking["problem"] %}
+
+                    <br><br>
+
+                    📝
+                    <strong>
+                        Problem:
+                    </strong>
+
+                    {{ booking["problem"] }}
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ACTION -->
+
+                <div class="action">
+
+
+                    <form
+                        method="POST"
+                        action="/update-status/{{ booking['id'] }}"
+                    >
+
+
+                        <select
+                            name="status"
+                            required
+                        >
+
+                            <option value="">
+                                Update Status
+                            </option>
+
+                            <option value="Accepted">
+                                ✓ Accept Job
+                            </option>
+
+                            <option value="On the Way">
+                                🚗 On the Way
+                            </option>
+
+                            <option value="Service Started">
+                                🔧 Service Started
+                            </option>
+
+                            <option value="Completed">
+                                ✅ Completed
+                            </option>
+
+                        </select>
+
+
+                        <button
+                            type="submit">
+
+                            Update Job
+
+                        </button>
+
+
+                    </form>
+
+
+                </div>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🔧
+                </div>
+
+                <h2>
+                    No Jobs Assigned
+                </h2>
+
+                <p>
+                    New service jobs assigned by Admin
+                    will appear here.
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Services | OSCAR ENGINEERS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        .header {
+            background: #0b1f3a;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .welcome {
+            font-size: 15px;
+        }
+
+        .logout {
+            background: #e53935;
+            color: white;
+            text-decoration: none;
+            padding: 9px 16px;
+            border-radius: 6px;
+        }
+
+        .container {
+            width: 94%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        h1 {
+            color: #0b1f3a;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #1976d2;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 6px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            border-left: 5px solid #1976d2;
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .booking-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0b1f3a;
+        }
+
+        .status {
+            padding: 7px 13px;
+            border-radius: 20px;
+            background: #e3f2fd;
+            color: #1565c0;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .detail {
+            background: #f7f9fc;
+            padding: 13px;
+            border-radius: 7px;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .technician {
+            margin-top: 18px;
+            padding: 15px;
+            background: #eef7ee;
+            border-radius: 8px;
+        }
+
+        .technician h3 {
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .problem {
+            margin-top: 18px;
+            padding: 15px;
+            background: #fff8e1;
+            border-radius: 8px;
+        }
+
+        .empty {
+            background: white;
+            padding: 50px 20px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .empty h2 {
+            color: #0b1f3a;
+            margin-bottom: 12px;
+        }
+
+        .book-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background: #1976d2;
+            color: white;
+            text-decoration: none;
+            padding: 12px 22px;
+            border-radius: 7px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .booking-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="logo">
+        OSCAR ENGINEERS
+    </div>
+
+    <div class="header-right">
+
+        <span class="welcome">
+            Welcome, {{ name }}
+        </span>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="container">
+
+
+    <div class="top-section">
+
+        <h1>
+            My Services
+        </h1>
+
+        <a href="{{ url_for('customer_dashboard') }}"
+           class="back-btn">
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- =================================================
+         BOOKINGS
+    ================================================== -->
+
+    {% if bookings %}
+
+        {% for booking in bookings %}
+
+        <div class="service-card">
+
+
+            <div class="booking-header">
+
+                <div class="booking-id">
+
+                    Booking ID:
+                    {{ booking["booking_id"] }}
+
+                </div>
+
+                <div class="status">
+
+                    {{ booking["status"] }}
+
+                </div>
+
+            </div>
+
+
+            <div class="details">
+
+
+                <div class="detail">
+
+                    <div class="label">
+                        Service
+                    </div>
+
+                    <div class="value">
+
+                        {{ booking["service_type"] or "Not specified" }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="label">
+                        AC Brand
+                    </div>
+
+                    <div class="value">
+
+                        {{ booking["ac_brand"] or "Not specified" }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="label">
+                        AC Type
+                    </div>
+
+                    <div class="value">
+
+                        {{ booking["ac_type"] or "Not specified" }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="label">
+                        Preferred Date
+                    </div>
+
+                    <div class="value">
+
+                        {{ booking["preferred_date"] or "Not specified" }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="label">
+                        Preferred Time
+                    </div>
+
+                    <div class="value">
+
+                        {{ booking["preferred_time"] or "Not specified" }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="label">
+                        Mobile
+                    </div>
+
+                    <div class="value">
+
+                        {{ booking["mobile"] }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="label">
+                        Address
+                    </div>
+
+                    <div class="value">
+
+                        {{ booking["address"] }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="label">
+                        Booking Date
+                    </div>
+
+                    <div class="value">
+
+                        {{ booking["created_at"] }}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 TECHNICIAN
+            ================================================== -->
+
+            {% if booking["technician_name"] %}
+
+            <div class="technician">
+
+                <h3>
+                    🔧 Assigned Technician
+                </h3>
+
+                <p>
+                    <strong>Name:</strong>
+                    {{ booking["technician_name"] }}
+                </p>
+
+                {% if booking["technician_mobile"] %}
+
+                <p>
+                    <strong>Mobile:</strong>
+                    {{ booking["technician_mobile"] }}
+                </p>
+
+                {% endif %}
+
+
+                {% if booking["technician_specialization"] %}
+
+                <p>
+                    <strong>Specialization:</strong>
+                    {{ booking["technician_specialization"] }}
+                </p>
+
+                {% endif %}
+
+            </div>
+
+            {% else %}
+
+            <div class="technician">
+
+                <h3>
+                    🔧 Technician
+                </h3>
+
+                <p>
+                    Technician has not been assigned yet.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 PROBLEM
+            ================================================== -->
+
+            {% if booking["problem"] %}
+
+            <div class="problem">
+
+                <strong>
+                    Problem / Service Details:
+                </strong>
+
+                <p style="margin-top:8px;">
+                    {{ booking["problem"] }}
+                </p>
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <div class="empty">
+
+            <h2>
+                No Services Found
+            </h2>
+
+            <p>
+                You haven't booked any service yet.
+            </p>
+
+            <a href="{{ url_for('book_service') }}"
+               class="book-btn">
+
+                Book AC Service
+
+            </a>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<div class="footer">
+
+    © 2026 OSCAR ENGINEERS
+    <br>
+    AC Service & Installation
+
+</div>
+
+
+</body>
+
+</html>

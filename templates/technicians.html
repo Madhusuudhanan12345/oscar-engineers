@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Technicians | OSCAR ENGINEERS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fa;
+            color: #17212b;
+        }
+
+        nav {
+            background: #07111f;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #34495e;
+            padding: 9px 15px;
+            border-radius: 7px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #ffb300, #ff6f00);
+            color: #111;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 9px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .table-box {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.06);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th {
+            background: #07111f;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .active {
+            color: #16803c;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px;
+            color: #7b8794;
+        }
+
+        .empty h3 {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<nav>
+
+    <div class="brand">
+        🐯 OSCAR ENGINEERS
+    </div>
+
+    <a href="/dashboard" class="back">
+        ← Dashboard
+    </a>
+
+</nav>
+
+
+<div class="container">
+
+
+    <div class="header">
+
+        <h1>
+            👨‍🔧 Technician Management
+        </h1>
+
+        <a href="/add-technician" class="add-btn">
+            + Add Technician
+        </a>
+
+    </div>
+
+
+    <div class="table-box">
+
+
+        {% if technicians %}
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+
+                    <th>Mobile</th>
+
+                    <th>Specialization</th>
+
+                    <th>Username</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% for technician in technicians %}
+
+
+                <tr>
+
+                    <td>
+                        {{ technician["name"] }}
+                    </td>
+
+                    <td>
+                        {{ technician["mobile"] }}
+                    </td>
+
+                    <td>
+                        {{ technician["specialization"] or "-" }}
+                    </td>
+
+                    <td>
+                        {{ technician["username"] }}
+                    </td>
+
+                    <td class="active">
+                        {{ technician["status"] }}
+                    </td>
+
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+
+        {% else %}
+
+
+        <div class="empty">
+
+            <h3>
+                No Technicians Added
+            </h3>
+
+            <p>
+                Click "Add Technician" to create your first technician.
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

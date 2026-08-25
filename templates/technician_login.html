@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>OSCAR ENGINEERS | Technician Login</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    #16466b,
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #050c15,
+                    #0d263b
+                );
+        }
+
+        .login-box {
+
+            width: 100%;
+
+            max-width: 430px;
+
+            padding: 40px 32px;
+
+            border-radius: 22px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.15);
+
+            backdrop-filter: blur(12px);
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,0.35);
+        }
+
+        .logo {
+
+            text-align: center;
+
+            font-size: 60px;
+
+            margin-bottom: 10px;
+        }
+
+        h1 {
+
+            text-align: center;
+
+            font-size: 28px;
+
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #b8c8d8;
+
+            margin-bottom: 30px;
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #dce7f2;
+
+            font-size: 14px;
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-bottom: 20px;
+
+            border: none;
+
+            outline: none;
+
+            border-radius: 10px;
+
+            background: #f5f8fc;
+
+            color: #111;
+
+            font-size: 15px;
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffb300,
+                    #ff6f00
+                );
+
+            color: #111;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+
+            opacity: 0.9;
+        }
+
+        .error {
+
+            background:
+                rgba(255,70,70,0.15);
+
+            border:
+                1px solid
+                rgba(255,70,70,0.4);
+
+            color: #ffb3b3;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+        }
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #b8c8d8;
+
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-box">
+
+
+    <div class="logo">
+        👨‍🔧
+    </div>
+
+
+    <h1>
+        Technician Login
+    </h1>
+
+
+    <p class="subtitle">
+        OSCAR ENGINEERS Service Portal
+    </p>
+
+
+    {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+
+    <form method="POST">
+
+
+        <label>
+            Username
+        </label>
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter technician username"
+            required
+        >
+
+
+        <label>
+            Password
+        </label>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter technician password"
+            required
+        >
+
+
+        <button type="submit">
+
+            🔧 Login to Technician Portal
+
+        </button>
+
+
+    </form>
+
+
+    <a
+        href="/login"
+        class="back"
+    >
+        ← Back to Login Portal
+    </a>
+
+
+</div>
+
+
+</body>
+
+</html>

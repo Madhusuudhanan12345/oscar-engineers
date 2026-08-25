@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Booking Confirmed | OSCAR ENGINEERS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #06101c, #0d2940);
+            padding: 20px;
+        }
+
+        .success-box {
+            width: 100%;
+            max-width: 550px;
+            background: white;
+            padding: 45px 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+        }
+
+        .icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #e8f8ee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        h1 {
+            color: #17212b;
+            margin-bottom: 12px;
+        }
+
+        .message {
+            color: #687786;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .booking-id-box {
+            background: linear-gradient(135deg, #07111f, #12324c);
+            color: white;
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .booking-id-title {
+            font-size: 13px;
+            color: #b9c7d6;
+            margin-bottom: 8px;
+        }
+
+        .booking-id {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffb300;
+            letter-spacing: 2px;
+        }
+
+        .details {
+            background: #f3f6fa;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .details p {
+            margin: 10px 0;
+            color: #394957;
+        }
+
+        .details strong {
+            color: #111;
+        }
+
+        .home-btn {
+            display: inline-block;
+            text-decoration: none;
+            background: linear-gradient(135deg, #ffb300, #ff6f00);
+            color: #111;
+            padding: 13px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .brand {
+            margin-top: 25px;
+            color: #8493a2;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="success-box">
+
+        <div class="icon">
+            ✅
+        </div>
+
+        <h1>
+            Booking Received!
+        </h1>
+
+        <p class="message">
+            Thank you, {{ customer_name }}.
+            Your AC service request has been received successfully.
+        </p>
+
+
+        <!-- BOOKING ID -->
+
+        <div class="booking-id-box">
+
+            <div class="booking-id-title">
+                YOUR BOOKING ID
+            </div>
+
+            <div class="booking-id">
+                {{ booking_id }}
+            </div>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="details">
+
+            <p>
+                <strong>Customer:</strong>
+                {{ customer_name }}
+            </p>
+
+            <p>
+                <strong>Service:</strong>
+                {{ service_type }}
+            </p>
+
+            <p>
+                <strong>Preferred Date:</strong>
+                {{ preferred_date }}
+            </p>
+
+        </div>
+
+
+        <a href="/" class="home-btn">
+            Back to Home
+        </a>
+
+
+        <div class="brand">
+
+            🐯 <strong>OSCAR ENGINEERS</strong><br>
+
+            AC Service • Installation • Maintenance
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

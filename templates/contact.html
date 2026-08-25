@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Contact Us | OSCAR ENGINEERS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        header {
+            background: linear-gradient(
+                135deg,
+                #071e3d,
+                #1261a0
+            );
+
+            color: white;
+
+            padding: 20px 5%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        main {
+            width: 92%;
+            max-width: 900px;
+            margin: 35px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,.07);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        input,
+        textarea {
+
+            width: 100%;
+
+            padding: 13px;
+
+            margin-top: 7px;
+
+            border:
+                1px solid #d8dee8;
+
+            border-radius: 9px;
+
+            font-size: 15px;
+
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        button {
+
+            margin-top: 20px;
+
+            border: none;
+
+            background: #1261a0;
+
+            color: white;
+
+            padding: 13px 22px;
+
+            border-radius: 9px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: .9;
+        }
+
+        .success {
+
+            background: #e9f8ef;
+
+            color: #168348;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+        }
+
+        .error {
+
+            background: #fff0f0;
+
+            color: #d63031;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+        }
+
+        .back {
+
+            display: inline-block;
+
+            margin-top: 20px;
+
+            background: #e9eef5;
+
+            color: #172033;
+
+            text-decoration: none;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+        }
+
+        .contact-info {
+
+            margin-bottom: 25px;
+
+            padding: 18px;
+
+            background: #f4f8fc;
+
+            border-radius: 12px;
+
+        }
+
+        @media(max-width:600px) {
+
+            header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>
+        📞 OSCAR ENGINEERS
+    </h1>
+
+</header>
+
+<main>
+
+    <div class="card">
+
+        <h2>
+            📩 Contact Us
+        </h2>
+
+        <div class="contact-info">
+
+            <h3>
+                Need AC Service?
+            </h3>
+
+            <p>
+                Have a question, service request,
+                or need assistance?
+                Send us a message.
+            </p>
+
+        </div>
+
+
+        {% if success %}
+
+        <div class="success">
+
+            ✅ {{ success }}
+
+        </div>
+
+        {% endif %}
+
+
+        {% if error %}
+
+        <div class="error">
+
+            ❌ {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            action="{{ url_for('contact') }}"
+        >
+
+            <label>
+                Name *
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter your name"
+                required
+            >
+
+
+            <label>
+                Mobile Number
+            </label>
+
+            <input
+                type="tel"
+                name="mobile"
+                placeholder="Enter mobile number"
+            >
+
+
+            <label>
+                Email
+            </label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter email address"
+            >
+
+
+            <label>
+                Subject
+            </label>
+
+            <input
+                type="text"
+                name="subject"
+                placeholder="Example: AC Service Enquiry"
+            >
+
+
+            <label>
+                Message *
+            </label>
+
+            <textarea
+                name="message"
+                placeholder="Write your message here..."
+                required
+            ></textarea>
+
+
+            <button type="submit">
+
+                📤 Send Message
+
+            </button>
+
+        </form>
+
+
+        <a
+            href="{{ url_for('home') }}"
+            class="back"
+        >
+            ← Back to Home
+        </a>
+
+    </div>
+
+</main>
+
+</body>
+</html>

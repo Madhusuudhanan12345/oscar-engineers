@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>OSCAR ENGINEERS | AC Service & Installation</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f5f8fc;
+            color: #14202b;
+        }
+
+        /* =================================================
+           NAVBAR
+        ================================================= */
+
+        nav {
+            min-height: 75px;
+            background: #07111f;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 4px 20px rgba(0,0,0,0.25);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffb300,
+                    #ff6f00
+                );
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 28px;
+        }
+
+        .logo-area h2 {
+            color: white;
+
+            letter-spacing: 1.5px;
+
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+
+            gap: 18px;
+
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #dce7f2;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffb300;
+        }
+
+        .primary-btn {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffb300,
+                    #ff6f00
+                );
+
+            color: #111 !important;
+
+            padding: 11px 17px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            text-decoration: none;
+
+            display: inline-block;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-btn {
+            background: #ffffff;
+
+            color: #07111f !important;
+
+            padding: 10px 17px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+
+        /* =================================================
+           HERO
+        ================================================= */
+
+        .hero {
+
+            min-height: 650px;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 70px 7%;
+
+            background:
+
+                radial-gradient(
+                    circle at 80% 30%,
+                    rgba(0,153,255,0.20),
+                    transparent 35%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #06101c,
+                    #0d2940
+                );
+
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .badge {
+
+            display: inline-block;
+
+            padding: 8px 14px;
+
+            border:
+                1px solid
+                rgba(255,179,0,0.5);
+
+            color: #ffb300;
+
+            border-radius: 30px;
+
+            font-size: 13px;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+
+            font-size:
+                clamp(
+                    40px,
+                    6vw,
+                    70px
+                );
+
+            line-height: 1.05;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #ffb300;
+        }
+
+        .hero p {
+
+            font-size: 18px;
+
+            line-height: 1.7;
+
+            color: #c9d7e5;
+
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+
+            display: flex;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+        .secondary-btn {
+
+            padding: 14px 23px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            display: inline-block;
+
+            border:
+                1px solid
+                #8194a8;
+
+            color: white;
+        }
+
+        .secondary-btn:hover {
+            border-color: #ffb300;
+
+            color: #ffb300;
+        }
+
+        /* =================================================
+           QUICK ACTIONS
+        ================================================= */
+
+        .quick-actions {
+
+            padding: 45px 7%;
+
+            background: white;
+        }
+
+        .quick-grid {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+        .quick-card {
+
+            text-decoration: none;
+
+            color: #14202b;
+
+            background: #f5f8fc;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            text-align: center;
+
+            border:
+                1px solid
+                #e1e8ef;
+
+            transition: 0.3s;
+        }
+
+        .quick-card:hover {
+
+            transform:
+                translateY(-5px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,0.08);
+        }
+
+        .quick-icon {
+
+            font-size: 38px;
+
+            margin-bottom: 12px;
+        }
+
+        .quick-card h3 {
+            margin-bottom: 8px;
+        }
+
+        .quick-card p {
+
+            color: #687786;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+        /* =================================================
+           SECTIONS
+        ================================================= */
+
+        .section {
+            padding: 80px 7%;
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            margin-bottom: 45px;
+        }
+
+        .section-title h2 {
+
+            font-size: 36px;
+
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #687786;
+        }
+
+        /* =================================================
+           SERVICES
+        ================================================= */
+
+        .services {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+        .service-card {
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 7px 25px
+                rgba(0,0,0,0.07);
+
+            transition: 0.3s;
+        }
+
+        .service-card:hover {
+
+            transform:
+                translateY(-7px);
+        }
+
+        .service-icon {
+
+            font-size: 42px;
+
+            margin-bottom: 18px;
+        }
+
+        .service-card h3 {
+
+            margin-bottom: 10px;
+        }
+
+        .service-card p {
+
+            color: #687786;
+
+            line-height: 1.6;
+        }
+
+        /* =================================================
+           WHY US
+        ================================================= */
+
+        .why {
+
+            background: #07111f;
+
+            color: white;
+        }
+
+        .why-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 20px;
+        }
+
+        .why-card {
+
+            text-align: center;
+
+            padding: 25px;
+        }
+
+        .why-card div {
+
+            font-size: 40px;
+
+            margin-bottom: 15px;
+        }
+
+        .why-card p {
+
+            color: #aebdca;
+
+            margin-top: 8px;
+
+            font-size: 14px;
+        }
+
+        /* =================================================
+           CTA
+        ================================================= */
+
+        .cta {
+
+            margin: 70px 7%;
+
+            padding: 60px 30px;
+
+            border-radius: 25px;
+
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffb300,
+                    #ff6f00
+                );
+        }
+
+        .cta h2 {
+
+            font-size: 36px;
+
+            margin-bottom: 12px;
+        }
+
+        .cta p {
+
+            margin-bottom: 25px;
+
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+        .cta-btn-dark {
+
+            display: inline-block;
+
+            background: #07111f;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 14px 25px;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+        }
+
+        .cta-btn-white {
+
+            display: inline-block;
+
+            background: white;
+
+            color: #07111f;
+
+            text-decoration: none;
+
+            padding: 14px 25px;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+        }
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        footer {
+
+            background: #050b12;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 35px 20px;
+        }
+
+        footer p {
+
+            color: #8b9aaa;
+
+            margin-top: 8px;
+
+            font-size: 13px;
+        }
+
+        /* =================================================
+           MOBILE
+        ================================================= */
+
+        @media (max-width: 900px) {
+
+            .nav-links a:not(.primary-btn):not(.login-btn) {
+                display: none;
+            }
+
+            .services {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .why-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .quick-grid {
+
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+
+                padding: 12px 20px;
+
+                min-height: 70px;
+            }
+
+            .logo-area h2 {
+
+                font-size: 16px;
+            }
+
+            .logo {
+
+                width: 42px;
+                height: 42px;
+
+                font-size: 23px;
+            }
+
+            .nav-links {
+
+                gap: 7px;
+            }
+
+            .nav-links .primary-btn {
+
+                display: none;
+            }
+
+            .login-btn {
+
+                padding:
+                    9px 12px;
+            }
+
+            .hero {
+
+                padding:
+                    60px 20px;
+
+                min-height:
+                    600px;
+            }
+
+            .hero h1 {
+
+                font-size: 43px;
+            }
+
+            .hero p {
+
+                font-size: 16px;
+            }
+
+            .section {
+
+                padding:
+                    60px 20px;
+            }
+
+            .services,
+            .why-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+
+                padding:
+                    35px 20px;
+            }
+
+            .quick-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .cta {
+
+                margin:
+                    50px 20px;
+
+                padding:
+                    45px 20px;
+            }
+
+            .cta h2 {
+
+                font-size: 30px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<nav>
+
+    <div class="logo-area">
+
+        <div class="logo">
+            🐯
+        </div>
+
+        <h2>
+            OSCAR ENGINEERS
+        </h2>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="#home">
+            Home
+        </a>
+
+        <a href="#services">
+            Services
+        </a>
+
+        <a href="#why">
+            Why Us
+        </a>
+
+        <a
+            href="/book-service"
+            class="primary-btn"
+        >
+            Book Service
+        </a>
+
+        <a href="/track-booking">
+            Track Booking
+        </a>
+
+        <a
+            href="/login"
+            class="login-btn"
+        >
+            Login
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    class="hero"
+    id="home"
+>
+
+    <div class="hero-content">
+
+        <div class="badge">
+
+            ❄ PROFESSIONAL AC SOLUTIONS
+
+        </div>
+
+
+        <h1>
+
+            Cool Comfort.<br>
+
+            <span>
+                Expert Service.
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            Professional AC service,
+            installation and maintenance
+            solutions for homes, offices
+            and businesses.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a
+                href="/book-service"
+                class="primary-btn"
+            >
+                🔧 Book AC Service
+            </a>
+
+
+            <a
+                href="/track-booking"
+                class="secondary-btn"
+            >
+                🔎 Track My Booking
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     QUICK ACTIONS
+===================================================== -->
+
+<section class="quick-actions">
+
+    <div class="quick-grid">
+
+
+        <a
+            href="/book-service"
+            class="quick-card"
+        >
+
+            <div class="quick-icon">
+                🔧
+            </div>
+
+            <h3>
+                Book AC Service
+            </h3>
+
+            <p>
+                Request AC service,
+                repair or installation.
+            </p>
+
+        </a>
+
+
+        <a
+            href="/track-booking"
+            class="quick-card"
+        >
+
+            <div class="quick-icon">
+                🔎
+            </div>
+
+            <h3>
+                Track Booking
+            </h3>
+
+            <p>
+                Check your booking
+                status using your
+                Booking ID.
+            </p>
+
+        </a>
+
+
+        <a
+            href="/customer-login"
+            class="quick-card"
+        >
+
+            <div class="quick-icon">
+                👤
+            </div>
+
+            <h3>
+                Customer Login
+            </h3>
+
+            <p>
+                Access your customer
+                account and services.
+            </p>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SERVICES
+===================================================== -->
+
+<section
+    class="section"
+    id="services"
+>
+
+    <div class="section-title">
+
+        <h2>
+            Our Services
+        </h2>
+
+        <p>
+            Complete air conditioning
+            solutions under one roof.
+        </p>
+
+    </div>
+
+
+    <div class="services">
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                ❄️
+            </div>
+
+            <h3>
+                AC Service
+            </h3>
+
+            <p>
+                Professional cleaning,
+                inspection and servicing
+                to keep your AC performing
+                efficiently.
+            </p>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🔧
+            </div>
+
+            <h3>
+                AC Repair
+            </h3>
+
+            <p>
+                Reliable diagnosis and
+                repair for common air
+                conditioning problems.
+            </p>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🏠
+            </div>
+
+            <h3>
+                AC Installation
+            </h3>
+
+            <p>
+                Expert installation for
+                residential and commercial
+                air conditioning systems.
+            </p>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🧊
+            </div>
+
+            <h3>
+                Gas Charging
+            </h3>
+
+            <p>
+                AC gas checking and charging
+                performed by trained service
+                professionals.
+            </p>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🛠️
+            </div>
+
+            <h3>
+                Maintenance
+            </h3>
+
+            <p>
+                Preventive maintenance
+                solutions that help extend
+                your AC's operating life.
+            </p>
+
+        </div>
+
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🏢
+            </div>
+
+            <h3>
+                Commercial AC
+            </h3>
+
+            <p>
+                AC service and installation
+                solutions for offices,
+                shops and commercial spaces.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     WHY CHOOSE US
+===================================================== -->
+
+<section
+    class="section why"
+    id="why"
+>
+
+    <div class="section-title">
+
+        <h2>
+            Why Choose OSCAR ENGINEERS?
+        </h2>
+
+        <p>
+            Professional service with
+            customer-focused support.
+        </p>
+
+    </div>
+
+
+    <div class="why-grid">
+
+
+        <div class="why-card">
+
+            <div>
+                👨‍🔧
+            </div>
+
+            <h3>
+                Skilled Technicians
+            </h3>
+
+            <p>
+                Professional service team.
+            </p>
+
+        </div>
+
+
+        <div class="why-card">
+
+            <div>
+                ⚡
+            </div>
+
+            <h3>
+                Quick Response
+            </h3>
+
+            <p>
+                Fast service coordination.
+            </p>
+
+        </div>
+
+
+        <div class="why-card">
+
+            <div>
+                💯
+            </div>
+
+            <h3>
+                Quality Service
+            </h3>
+
+            <p>
+                Customer-focused workmanship.
+            </p>
+
+        </div>
+
+
+        <div class="why-card">
+
+            <div>
+                🛡️
+            </div>
+
+            <h3>
+                Reliable Support
+            </h3>
+
+            <p>
+                Service you can trust.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CTA
+===================================================== -->
+
+<section
+    class="cta"
+    id="contact"
+>
+
+    <h2>
+        Need AC Service?
+    </h2>
+
+
+    <p>
+
+        Book your service or track
+        your existing booking easily
+        with OSCAR ENGINEERS.
+
+    </p>
+
+
+    <div class="cta-buttons">
+
+        <a
+            href="/book-service"
+            class="cta-btn-dark"
+        >
+            🔧 Book a Service
+        </a>
+
+
+        <a
+            href="/track-booking"
+            class="cta-btn-white"
+        >
+            🔎 Track Booking
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <h3>
+        🐯 OSCAR ENGINEERS
+    </h3>
+
+
+    <p>
+        AC Service • Installation • Maintenance
+    </p>
+
+
+    <p>
+        © 2026 OSCAR ENGINEERS.
+        All Rights Reserved.Designed with Love By Prime Talent Hub -Annur,Contact-7598523283
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
