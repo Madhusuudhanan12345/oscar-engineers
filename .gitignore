@@ -1,0 +1,12 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+database.db
+instance/
+.vscode/
+.vnv
+app copy.py
+database copy.db
+*.db

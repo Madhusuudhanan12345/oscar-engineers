@@ -1,17 +1,69 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+import os
 import sqlite3
+
 from datetime import datetime
+
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    session
+)
+
+from dotenv import load_dotenv
+
+from werkzeug.security import check_password_hash
+
+
+# =========================================================
+# LOAD ENVIRONMENT VARIABLES
+# =========================================================
+
+load_dotenv()
+
+
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
+ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH")
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+
+# =========================================================
+# SECURITY CHECK
+# =========================================================
+
+if not ADMIN_USERNAME:
+    raise RuntimeError(
+        "ADMIN_USERNAME is missing. Please add it to .env"
+    )
+
+if not ADMIN_PASSWORD_HASH:
+    raise RuntimeError(
+        "ADMIN_PASSWORD_HASH is missing. Please add it to .env"
+    )
+
+if not SECRET_KEY:
+    raise RuntimeError(
+        "SECRET_KEY is missing. Please add it to .env"
+    )
+
+
+# =========================================================
+# FLASK APP
+# =========================================================
 
 app = Flask(__name__)
 
-app.secret_key = "oscar_engineers_secret_key_2026"
+app.secret_key = SECRET_KEY
+
+
+# =========================================================
+# DATABASE
+# =========================================================
 
 DATABASE = "database.db"
 
-
-# =========================================================
-# DATABASE CONNECTION
-# =========================================================
 
 def get_db_connection():
 
@@ -30,9 +82,10 @@ def init_database():
 
     conn = get_db_connection()
 
-    # -----------------------------------------------------
-    # BOOKINGS TABLE
-    # -----------------------------------------------------
+
+    # =====================================================
+    # BOOKINGS
+    # =====================================================
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS bookings (
@@ -64,13 +117,13 @@ def init_database():
             technician_id INTEGER,
 
             created_at TEXT
-
         )
     """)
 
-    # -----------------------------------------------------
-    # TECHNICIANS TABLE
-    # -----------------------------------------------------
+
+    # =====================================================
+    # TECHNICIANS
+    # =====================================================
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS technicians (
@@ -90,13 +143,13 @@ def init_database():
             status TEXT DEFAULT 'Active',
 
             created_at TEXT
-
         )
     """)
 
-    # -----------------------------------------------------
-    # CUSTOMERS TABLE
-    # -----------------------------------------------------
+
+    # =====================================================
+    # CUSTOMERS
+    # =====================================================
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS customers (
@@ -111,20 +164,20 @@ def init_database():
 
             address TEXT,
 
-            username TEXT UNIQUE NOT NULL,
+            username TEXT UNIQUE,
 
-            password TEXT NOT NULL,
+            password TEXT,
 
             status TEXT DEFAULT 'Active',
 
             created_at TEXT
-
         )
     """)
 
-    # -----------------------------------------------------
+
+    # =====================================================
     # CONTACT MESSAGES
-    # -----------------------------------------------------
+    # =====================================================
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS contact_messages (
@@ -139,14 +192,14 @@ def init_database():
 
             subject TEXT,
 
-            message TEXT NOT NULL,
+            message TEXT,
 
             status TEXT DEFAULT 'New',
 
             created_at TEXT
-
         )
     """)
+
 
     conn.commit()
 
@@ -160,17 +213,35 @@ def init_database():
 @app.route("/")
 def home():
 
-    return render_template("home.html")
+    return render_template(
+        "home.html"
+    )
 
 
 # =========================================================
-# GENERAL LOGIN
+# LOGIN PORTAL
 # =========================================================
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login")
 def login():
 
+    return render_template(
+        "login.html"
+    )
+
+
+# =========================================================
+# HIDDEN ADMIN LOGIN
+# =========================================================
+
+@app.route(
+    "/oscar-control-2026",
+    methods=["GET", "POST"]
+)
+def admin_login():
+
     error = None
+
 
     if request.method == "POST":
 
@@ -184,15 +255,22 @@ def login():
             ""
         )
 
-        # -------------------------------------------------
-        # ADMIN
-        # -------------------------------------------------
 
-        if username == "admin" and password == "admin123":
+        # =================================================
+        # SECURE ADMIN LOGIN
+        # =================================================
+
+        if (
+            username == ADMIN_USERNAME
+            and check_password_hash(
+                ADMIN_PASSWORD_HASH,
+                password
+            )
+        ):
 
             session.clear()
 
-            session["username"] = "admin"
+            session["username"] = ADMIN_USERNAME
 
             session["name"] = "Oscar Admin"
 
@@ -202,28 +280,65 @@ def login():
                 url_for("dashboard")
             )
 
-        # -------------------------------------------------
-        # CUSTOMER
-        # -------------------------------------------------
+
+        error = (
+            "Invalid Admin username or password."
+        )
+
+
+    return render_template(
+        "admin_login.html",
+        error=error
+    )
+
+
+# =========================================================
+# CUSTOMER LOGIN
+# =========================================================
+
+@app.route(
+    "/customer-login",
+    methods=["GET", "POST"]
+)
+def customer_login():
+
+    error = None
+
+    registered = request.args.get(
+        "registered"
+    )
+
+
+    if request.method == "POST":
+
+        username = request.form.get(
+            "username",
+            ""
+        ).strip()
+
+        password = request.form.get(
+            "password",
+            ""
+        )
+
 
         conn = get_db_connection()
+
 
         customer = conn.execute("""
             SELECT *
             FROM customers
-
             WHERE username = ?
-
             AND password = ?
-
             AND status = 'Active'
-
         """, (
             username,
             password
         )).fetchone()
 
+
         conn.close()
+
 
         if customer:
 
@@ -237,105 +352,28 @@ def login():
 
             session["customer_id"] = customer["id"]
 
-            return redirect(
-                url_for("customer_dashboard")
-            )
-
-        # -------------------------------------------------
-        # TECHNICIAN
-        # -------------------------------------------------
-
-        conn = get_db_connection()
-
-        technician = conn.execute("""
-            SELECT *
-            FROM technicians
-
-            WHERE username = ?
-
-            AND password = ?
-
-            AND status = 'Active'
-
-        """, (
-            username,
-            password
-        )).fetchone()
-
-        conn.close()
-
-        if technician:
-
-            session.clear()
-
-            session["username"] = technician["username"]
-
-            session["name"] = technician["name"]
-
-            session["role"] = "Technician"
-
-            session["technician_id"] = technician["id"]
 
             return redirect(
-                url_for("technician_jobs")
+                url_for(
+                    "customer_dashboard"
+                )
             )
 
-        error = "Invalid username or password."
 
-    return render_template(
-        "login.html",
-        error=error
-    )
-
-
-# =========================================================
-# ADMIN LOGIN
-# =========================================================
-
-@app.route(
-    "/admin-login",
-    methods=["GET", "POST"]
-)
-def admin_login():
-
-    error = None
-
-    if request.method == "POST":
-
-        username = request.form.get(
-            "username",
-            ""
-        ).strip()
-
-        password = request.form.get(
-            "password",
-            ""
+        error = (
+            "Invalid Customer username or password."
         )
 
-        if username == "admin" and password == "admin123":
-
-            session.clear()
-
-            session["username"] = "admin"
-
-            session["name"] = "Oscar Admin"
-
-            session["role"] = "Admin"
-
-            return redirect(
-                url_for("dashboard")
-            )
-
-        error = "Invalid Admin username or password."
 
     return render_template(
-        "admin_login.html",
-        error=error
+        "customer_login.html",
+        error=error,
+        registered=registered
     )
 
 
 # =========================================================
-# CUSTOMER SIGN UP
+# CUSTOMER SIGNUP
 # =========================================================
 
 @app.route(
@@ -345,6 +383,7 @@ def admin_login():
 def customer_signup():
 
     error = None
+
 
     if request.method == "POST":
 
@@ -383,21 +422,37 @@ def customer_signup():
             ""
         )
 
-        if not name or not mobile or not username or not password:
 
-            error = "Please fill all required fields."
+        if (
+            not name
+            or not mobile
+            or not username
+            or not password
+        ):
+
+            error = (
+                "Please fill all required fields."
+            )
+
 
         elif len(password) < 6:
 
-            error = "Password must contain at least 6 characters."
+            error = (
+                "Password must contain at least 6 characters."
+            )
+
 
         elif password != confirm_password:
 
-            error = "Passwords do not match."
+            error = (
+                "Passwords do not match."
+            )
+
 
         else:
 
             conn = get_db_connection()
+
 
             existing = conn.execute("""
                 SELECT id
@@ -407,11 +462,15 @@ def customer_signup():
                 username,
             )).fetchone()
 
+
             if existing:
 
-                error = "Username already exists."
-
                 conn.close()
+
+                error = (
+                    "Username already exists."
+                )
+
 
             else:
 
@@ -427,9 +486,7 @@ def customer_signup():
                         status,
                         created_at
                     )
-
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-
                 """, (
                     name,
                     mobile,
@@ -443,9 +500,11 @@ def customer_signup():
                     )
                 ))
 
+
                 conn.commit()
 
                 conn.close()
+
 
                 return redirect(
                     url_for(
@@ -454,83 +513,10 @@ def customer_signup():
                     )
                 )
 
+
     return render_template(
         "customer_signup.html",
         error=error
-    )
-
-
-# =========================================================
-# CUSTOMER LOGIN
-# =========================================================
-
-@app.route(
-    "/customer-login",
-    methods=["GET", "POST"]
-)
-def customer_login():
-
-    error = None
-
-    registered = request.args.get(
-        "registered"
-    )
-
-    if request.method == "POST":
-
-        username = request.form.get(
-            "username",
-            ""
-        ).strip()
-
-        password = request.form.get(
-            "password",
-            ""
-        )
-
-        conn = get_db_connection()
-
-        customer = conn.execute("""
-            SELECT *
-            FROM customers
-
-            WHERE username = ?
-
-            AND password = ?
-
-            AND status = 'Active'
-
-        """, (
-            username,
-            password
-        )).fetchone()
-
-        conn.close()
-
-        if customer:
-
-            session.clear()
-
-            session["username"] = customer["username"]
-
-            session["name"] = customer["name"]
-
-            session["role"] = "Customer"
-
-            session["customer_id"] = customer["id"]
-
-            return redirect(
-                url_for("customer_dashboard")
-            )
-
-        error = "Invalid Customer username or password."
-
-    return render_template(
-        "customer_login.html",
-
-        error=error,
-
-        registered=registered
     )
 
 
@@ -547,23 +533,19 @@ def customer_dashboard():
             url_for("customer_login")
         )
 
+
     return render_template(
         "customer_dashboard.html",
-
         name=session.get("name")
     )
 
 
 # =========================================================
-# CUSTOMER MY SERVICES
+# CUSTOMER SERVICES
 # =========================================================
 
 @app.route("/my-services")
 def my_services():
-
-    # -----------------------------------------------------
-    # CUSTOMER LOGIN CHECK
-    # -----------------------------------------------------
 
     if session.get("role") != "Customer":
 
@@ -571,63 +553,23 @@ def my_services():
             url_for("customer_login")
         )
 
+
     customer_id = session.get(
         "customer_id"
     )
 
-    username = session.get(
-        "username"
-    )
 
     conn = get_db_connection()
 
-    # -----------------------------------------------------
-    # FIND CUSTOMER USING ID
-    # -----------------------------------------------------
 
-    customer = None
+    customer = conn.execute("""
+        SELECT *
+        FROM customers
+        WHERE id = ?
+    """, (
+        customer_id,
+    )).fetchone()
 
-    if customer_id:
-
-        customer = conn.execute("""
-            SELECT *
-            FROM customers
-
-            WHERE id = ?
-
-            AND status = 'Active'
-
-        """, (
-            customer_id,
-        )).fetchone()
-
-    # -----------------------------------------------------
-    # FALLBACK: FIND CUSTOMER USING USERNAME
-    # -----------------------------------------------------
-
-    if customer is None and username:
-
-        customer = conn.execute("""
-            SELECT *
-            FROM customers
-
-            WHERE username = ?
-
-            AND status = 'Active'
-
-        """, (
-            username,
-        )).fetchone()
-
-        # Restore customer ID into session
-
-        if customer:
-
-            session["customer_id"] = customer["id"]
-
-    # -----------------------------------------------------
-    # CUSTOMER NOT FOUND
-    # -----------------------------------------------------
 
     if customer is None:
 
@@ -639,9 +581,6 @@ def my_services():
             url_for("customer_login")
         )
 
-    # -----------------------------------------------------
-    # GET CUSTOMER BOOKINGS
-    # -----------------------------------------------------
 
     bookings = conn.execute("""
         SELECT
@@ -649,13 +588,13 @@ def my_services():
             bookings.*,
 
             technicians.name
-            AS technician_name,
+                AS technician_name,
 
             technicians.mobile
-            AS technician_mobile,
+                AS technician_mobile,
 
             technicians.specialization
-            AS technician_specialization
+                AS technician_specialization
 
         FROM bookings
 
@@ -672,7 +611,9 @@ def my_services():
         customer["mobile"],
     )).fetchall()
 
+
     conn.close()
+
 
     return render_template(
         "my_services.html",
@@ -696,11 +637,14 @@ def customer_profile():
             url_for("customer_login")
         )
 
+
     customer_id = session.get(
         "customer_id"
     )
 
+
     conn = get_db_connection()
+
 
     customer = conn.execute("""
         SELECT *
@@ -710,7 +654,9 @@ def customer_profile():
         customer_id,
     )).fetchone()
 
+
     conn.close()
+
 
     if customer is None:
 
@@ -718,9 +664,9 @@ def customer_profile():
             url_for("customer_login")
         )
 
+
     return render_template(
         "customer_profile.html",
-
         customer=customer
     )
 
@@ -737,6 +683,7 @@ def technician_login():
 
     error = None
 
+
     if request.method == "POST":
 
         username = request.form.get(
@@ -749,46 +696,58 @@ def technician_login():
             ""
         )
 
+
         conn = get_db_connection()
+
 
         technician = conn.execute("""
             SELECT *
             FROM technicians
-
             WHERE username = ?
-
             AND password = ?
-
             AND status = 'Active'
-
         """, (
             username,
             password
         )).fetchone()
 
+
         conn.close()
+
 
         if technician:
 
             session.clear()
 
-            session["username"] = technician["username"]
+            session["username"] = (
+                technician["username"]
+            )
 
-            session["name"] = technician["name"]
+            session["name"] = (
+                technician["name"]
+            )
 
             session["role"] = "Technician"
 
-            session["technician_id"] = technician["id"]
-
-            return redirect(
-                url_for("technician_jobs")
+            session["technician_id"] = (
+                technician["id"]
             )
 
-        error = "Invalid Technician username or password."
+
+            return redirect(
+                url_for(
+                    "technician_jobs"
+                )
+            )
+
+
+        error = (
+            "Invalid Technician username or password."
+        )
+
 
     return render_template(
         "technician_login.html",
-
         error=error
     )
 
@@ -806,26 +765,27 @@ def technician_jobs():
             url_for("technician_login")
         )
 
+
     technician_id = session.get(
         "technician_id"
     )
 
+
     conn = get_db_connection()
+
 
     bookings = conn.execute("""
         SELECT *
-
         FROM bookings
-
         WHERE technician_id = ?
-
         ORDER BY id DESC
-
     """, (
         technician_id,
     )).fetchall()
 
+
     conn.close()
+
 
     return render_template(
         "technician_jobs.html",
@@ -849,7 +809,13 @@ def dashboard():
             url_for("admin_login")
         )
 
+
     conn = get_db_connection()
+
+
+    # =====================================================
+    # BOOKINGS
+    # =====================================================
 
     bookings = conn.execute("""
         SELECT
@@ -857,10 +823,10 @@ def dashboard():
             bookings.*,
 
             technicians.name
-            AS technician_name,
+                AS technician_name,
 
             technicians.mobile
-            AS technician_mobile
+                AS technician_mobile
 
         FROM bookings
 
@@ -870,39 +836,44 @@ def dashboard():
            technicians.id
 
         ORDER BY bookings.id DESC
-
     """).fetchall()
+
+
+    # =====================================================
+    # TECHNICIANS
+    # =====================================================
 
     technicians = conn.execute("""
         SELECT *
-
         FROM technicians
-
-        WHERE status = 'Active'
-
-        ORDER BY name ASC
-
+        ORDER BY id DESC
     """).fetchall()
+
+
+    # =====================================================
+    # CUSTOMERS
+    # =====================================================
 
     customers = conn.execute("""
         SELECT *
-
         FROM customers
-
         ORDER BY id DESC
-
     """).fetchall()
+
+
+    # =====================================================
+    # CONTACT MESSAGES
+    # =====================================================
 
     contact_messages = conn.execute("""
         SELECT *
-
         FROM contact_messages
-
         ORDER BY id DESC
-
     """).fetchall()
 
+
     conn.close()
+
 
     return render_template(
         "dashboard.html",
@@ -922,6 +893,94 @@ def dashboard():
 
 
 # =========================================================
+# CUSTOMER MANAGEMENT
+# =========================================================
+# This route fixes:
+# BuildError: Could not build url for endpoint 'customers'
+# =========================================================
+
+@app.route("/customers")
+def customers():
+
+    if session.get("role") != "Admin":
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+
+    conn = get_db_connection()
+
+
+    customer_list = conn.execute("""
+        SELECT *
+        FROM customers
+        ORDER BY id DESC
+    """).fetchall()
+
+
+    conn.close()
+
+
+    return render_template(
+        "customers.html",
+        customers=customer_list
+    )
+
+
+# =========================================================
+# DELETE CUSTOMER
+# =========================================================
+
+@app.route(
+    "/delete-customer/<int:customer_id>",
+    methods=["POST"]
+)
+def delete_customer(customer_id):
+
+    if session.get("role") != "Admin":
+
+        return "Access Denied", 403
+
+
+    conn = get_db_connection()
+
+
+    customer = conn.execute("""
+        SELECT *
+        FROM customers
+        WHERE id = ?
+    """, (
+        customer_id,
+    )).fetchone()
+
+
+    if customer is None:
+
+        conn.close()
+
+        return "Customer not found", 404
+
+
+    conn.execute("""
+        DELETE FROM customers
+        WHERE id = ?
+    """, (
+        customer_id,
+    ))
+
+
+    conn.commit()
+
+    conn.close()
+
+
+    return redirect(
+        url_for("dashboard")
+    )
+
+
+# =========================================================
 # TECHNICIANS
 # =========================================================
 
@@ -934,23 +993,23 @@ def technicians():
             url_for("admin_login")
         )
 
+
     conn = get_db_connection()
 
-    technicians = conn.execute("""
+
+    technician_list = conn.execute("""
         SELECT *
-
         FROM technicians
-
         ORDER BY id DESC
-
     """).fetchall()
+
 
     conn.close()
 
+
     return render_template(
         "technicians.html",
-
-        technicians=technicians
+        technicians=technician_list
     )
 
 
@@ -970,7 +1029,9 @@ def add_technician():
             url_for("admin_login")
         )
 
+
     error = None
+
 
     if request.method == "POST":
 
@@ -999,15 +1060,25 @@ def add_technician():
             ""
         )
 
-        if not name or not mobile or not username or not password:
 
-            error = "Please fill all required fields."
+        if (
+            not name
+            or not mobile
+            or not username
+            or not password
+        ):
+
+            error = (
+                "Please fill all required fields."
+            )
+
 
         else:
 
-            try:
+            conn = get_db_connection()
 
-                conn = get_db_connection()
+
+            try:
 
                 conn.execute("""
                     INSERT INTO technicians
@@ -1020,9 +1091,7 @@ def add_technician():
                         status,
                         created_at
                     )
-
                     VALUES (?, ?, ?, ?, ?, ?, ?)
-
                 """, (
                     name,
                     mobile,
@@ -1035,21 +1104,28 @@ def add_technician():
                     )
                 ))
 
+
                 conn.commit()
 
                 conn.close()
+
 
                 return redirect(
                     url_for("technicians")
                 )
 
+
             except sqlite3.IntegrityError:
 
-                error = "Username already exists."
+                conn.close()
+
+                error = (
+                    "Username already exists."
+                )
+
 
     return render_template(
         "add_technician.html",
-
         error=error
     )
 
@@ -1099,40 +1175,43 @@ def book_service():
         preferred_date = request.form.get(
             "preferred_date",
             ""
-        )
+        ).strip()
 
         preferred_time = request.form.get(
             "preferred_time",
             ""
-        )
+        ).strip()
 
         problem = request.form.get(
             "problem",
             ""
         ).strip()
 
+
         date_part = datetime.now().strftime(
             "%Y%m%d"
         )
 
+
         conn = get_db_connection()
+
 
         cursor = conn.execute("""
             SELECT COUNT(*)
-
             FROM bookings
-
             WHERE booking_id LIKE ?
-
         """, (
             f"OE-{date_part}-%",
         ))
 
+
         count = cursor.fetchone()[0] + 1
+
 
         booking_id = (
             f"OE-{date_part}-{count:04d}"
         )
+
 
         conn.execute("""
             INSERT INTO bookings
@@ -1151,10 +1230,7 @@ def book_service():
                 technician_id,
                 created_at
             )
-
-            VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             booking_id,
             customer_name,
@@ -1173,9 +1249,11 @@ def book_service():
             )
         ))
 
+
         conn.commit()
 
         conn.close()
+
 
         return render_template(
             "booking_success.html",
@@ -1189,8 +1267,242 @@ def book_service():
             booking_id=booking_id
         )
 
+
     return render_template(
         "book_service.html"
+    )
+
+
+# =========================================================
+# ASSIGN TECHNICIAN
+# =========================================================
+
+@app.route(
+    "/assign-technician/<int:booking_id>",
+    methods=["POST"]
+)
+def assign_technician(booking_id):
+
+    if session.get("role") != "Admin":
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+
+    technician_id = request.form.get(
+        "technician_id"
+    )
+
+
+    if not technician_id:
+
+        return redirect(
+            url_for("dashboard")
+        )
+
+
+    conn = get_db_connection()
+
+
+    technician = conn.execute("""
+        SELECT id
+        FROM technicians
+        WHERE id = ?
+        AND status = 'Active'
+    """, (
+        technician_id,
+    )).fetchone()
+
+
+    if technician is None:
+
+        conn.close()
+
+        return "Invalid Technician", 400
+
+
+    conn.execute("""
+        UPDATE bookings
+
+        SET
+            technician_id = ?,
+            status = 'Assigned'
+
+        WHERE id = ?
+    """, (
+        technician_id,
+        booking_id
+    ))
+
+
+    conn.commit()
+
+    conn.close()
+
+
+    return redirect(
+        url_for("dashboard")
+    )
+
+
+# =========================================================
+# UPDATE BOOKING STATUS
+# =========================================================
+
+@app.route(
+    "/update-status/<int:booking_id>",
+    methods=["POST"]
+)
+def update_status(booking_id):
+
+    if "username" not in session:
+
+        return redirect(
+            url_for("login")
+        )
+
+
+    role = session.get("role")
+
+
+    new_status = request.form.get(
+        "status",
+        ""
+    )
+
+
+    allowed_statuses = [
+
+        "New",
+
+        "Assigned",
+
+        "Accepted",
+
+        "On the Way",
+
+        "Service Started",
+
+        "Completed",
+
+        "Cancelled"
+    ]
+
+
+    if new_status not in allowed_statuses:
+
+        return "Invalid Status", 400
+
+
+    conn = get_db_connection()
+
+
+    # =====================================================
+    # ADMIN
+    # =====================================================
+
+    if role == "Admin":
+
+        conn.execute("""
+            UPDATE bookings
+
+            SET status = ?
+
+            WHERE id = ?
+        """, (
+            new_status,
+            booking_id
+        ))
+
+
+    # =====================================================
+    # TECHNICIAN
+    # =====================================================
+
+    elif role == "Technician":
+
+        technician_id = session.get(
+            "technician_id"
+        )
+
+
+        technician_allowed = [
+
+            "Accepted",
+
+            "On the Way",
+
+            "Service Started",
+
+            "Completed"
+        ]
+
+
+        if new_status not in technician_allowed:
+
+            conn.close()
+
+            return (
+                "Invalid Technician Status",
+                400
+            )
+
+
+        booking = conn.execute("""
+            SELECT id
+            FROM bookings
+            WHERE id = ?
+            AND technician_id = ?
+        """, (
+            booking_id,
+            technician_id
+        )).fetchone()
+
+
+        if booking is None:
+
+            conn.close()
+
+            return "Access Denied", 403
+
+
+        conn.execute("""
+            UPDATE bookings
+
+            SET status = ?
+
+            WHERE id = ?
+
+            AND technician_id = ?
+        """, (
+            new_status,
+            booking_id,
+            technician_id
+        ))
+
+
+    else:
+
+        conn.close()
+
+        return "Access Denied", 403
+
+
+    conn.commit()
+
+    conn.close()
+
+
+    if role == "Technician":
+
+        return redirect(
+            url_for("technician_jobs")
+        )
+
+
+    return redirect(
+        url_for("dashboard")
     )
 
 
@@ -1207,6 +1519,7 @@ def contact():
     success = None
 
     error = None
+
 
     if request.method == "POST":
 
@@ -1235,13 +1548,18 @@ def contact():
             ""
         ).strip()
 
+
         if not name or not message:
 
-            error = "Name and message are required."
+            error = (
+                "Name and message are required."
+            )
+
 
         else:
 
             conn = get_db_connection()
+
 
             conn.execute("""
                 INSERT INTO contact_messages
@@ -1254,9 +1572,7 @@ def contact():
                     status,
                     created_at
                 )
-
                 VALUES (?, ?, ?, ?, ?, ?, ?)
-
             """, (
                 name,
                 mobile,
@@ -1269,13 +1585,16 @@ def contact():
                 )
             ))
 
+
             conn.commit()
 
             conn.close()
 
+
             success = (
                 "Thank you! Your message has been sent successfully."
             )
+
 
     return render_template(
         "contact.html",
@@ -1284,225 +1603,6 @@ def contact():
 
         error=error
     )
-
-
-# =========================================================
-# ASSIGN TECHNICIAN
-# =========================================================
-
-@app.route(
-    "/assign-technician/<int:booking_id>",
-    methods=["POST"]
-)
-def assign_technician(booking_id):
-
-    if session.get("role") != "Admin":
-
-        return redirect(
-            url_for("admin_login")
-        )
-
-    technician_id = request.form.get(
-        "technician_id"
-    )
-
-    if not technician_id:
-
-        return redirect(
-            url_for("dashboard")
-        )
-
-    conn = get_db_connection()
-
-    technician = conn.execute("""
-        SELECT *
-
-        FROM technicians
-
-        WHERE id = ?
-
-        AND status = 'Active'
-
-    """, (
-        technician_id,
-    )).fetchone()
-
-    if technician is None:
-
-        conn.close()
-
-        return "Invalid Technician", 400
-
-    conn.execute("""
-        UPDATE bookings
-
-        SET
-
-            technician_id = ?,
-
-            status = 'Assigned'
-
-        WHERE id = ?
-
-    """, (
-        technician_id,
-        booking_id
-    ))
-
-    conn.commit()
-
-    conn.close()
-
-    return redirect(
-        url_for("dashboard")
-    )
-
-
-# =========================================================
-# UPDATE BOOKING STATUS
-# =========================================================
-
-@app.route(
-    "/update-status/<int:booking_id>",
-    methods=["POST"]
-)
-def update_status(booking_id):
-
-    if "username" not in session:
-
-        return redirect(
-            url_for("login")
-        )
-
-    role = session.get("role")
-
-    new_status = request.form.get(
-        "status",
-        ""
-    )
-
-    # -----------------------------------------------------
-    # ADMIN
-    # -----------------------------------------------------
-
-    if role == "Admin":
-
-        allowed_statuses = [
-
-            "New",
-
-            "Assigned",
-
-            "Accepted",
-
-            "On the Way",
-
-            "Service Started",
-
-            "Completed",
-
-            "Cancelled"
-
-        ]
-
-        if new_status not in allowed_statuses:
-
-            return "Invalid Status", 400
-
-        conn = get_db_connection()
-
-        conn.execute("""
-            UPDATE bookings
-
-            SET status = ?
-
-            WHERE id = ?
-
-        """, (
-            new_status,
-            booking_id
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect(
-            url_for("dashboard")
-        )
-
-    # -----------------------------------------------------
-    # TECHNICIAN
-    # -----------------------------------------------------
-
-    if role == "Technician":
-
-        technician_id = session.get(
-            "technician_id"
-        )
-
-        allowed_statuses = [
-
-            "Accepted",
-
-            "On the Way",
-
-            "Service Started",
-
-            "Completed"
-
-        ]
-
-        if new_status not in allowed_statuses:
-
-            return "Invalid Status", 400
-
-        conn = get_db_connection()
-
-        booking = conn.execute("""
-            SELECT *
-
-            FROM bookings
-
-            WHERE id = ?
-
-            AND technician_id = ?
-
-        """, (
-            booking_id,
-            technician_id
-        )).fetchone()
-
-        if booking is None:
-
-            conn.close()
-
-            return "Access Denied", 403
-
-        conn.execute("""
-            UPDATE bookings
-
-            SET status = ?
-
-            WHERE id = ?
-
-            AND technician_id = ?
-
-        """, (
-            new_status,
-            booking_id,
-            technician_id
-        ))
-
-        conn.commit()
-
-        conn.close()
-
-        return redirect(
-            url_for("technician_jobs")
-        )
-
-    return "Access Denied", 403
 
 
 # =========================================================
@@ -1519,6 +1619,7 @@ def track_booking():
 
     error = None
 
+
     if request.method == "POST":
 
         booking_id = request.form.get(
@@ -1526,15 +1627,18 @@ def track_booking():
             ""
         ).strip()
 
+
         if not booking_id:
 
             error = (
                 "Please enter your Booking ID."
             )
 
+
         else:
 
             conn = get_db_connection()
+
 
             booking = conn.execute("""
                 SELECT
@@ -1542,13 +1646,13 @@ def track_booking():
                     bookings.*,
 
                     technicians.name
-                    AS technician_name,
+                        AS technician_name,
 
                     technicians.mobile
-                    AS technician_mobile,
+                        AS technician_mobile,
 
                     technicians.specialization
-                    AS technician_specialization
+                        AS technician_specialization
 
                 FROM bookings
 
@@ -1563,15 +1667,17 @@ def track_booking():
                 booking_id,
             )).fetchone()
 
+
             conn.close()
+
 
             if booking is None:
 
                 error = (
                     "Booking ID not found. "
-                    "Please check your Booking ID "
-                    "and try again."
+                    "Please check your Booking ID and try again."
                 )
+
 
     return render_template(
         "track_booking.html",
@@ -1591,13 +1697,14 @@ def logout():
 
     session.clear()
 
+
     return redirect(
-        url_for("home")
+        url_for("login")
     )
 
 
 # =========================================================
-# 404 ERROR
+# 404
 # =========================================================
 
 @app.errorhandler(404)
@@ -1613,7 +1720,7 @@ def page_not_found(error):
 
 
 # =========================================================
-# 500 ERROR
+# 500
 # =========================================================
 
 @app.errorhandler(500)
@@ -1622,10 +1729,7 @@ def internal_error(error):
     return """
     <h1>500 - Internal Server Error</h1>
 
-    <p>
-        Please check the Flask terminal
-        for the error.
-    </p>
+    <p>Please check the Flask terminal for the error.</p>
 
     <a href="/">Go Home</a>
     """, 500
@@ -1639,6 +1743,7 @@ if __name__ == "__main__":
 
     init_database()
 
+
     print("")
     print("========================================")
     print("          OSCAR ENGINEERS")
@@ -1648,50 +1753,38 @@ if __name__ == "__main__":
 
     print("Home:")
     print("http://127.0.0.1:5000/")
-
     print("")
 
-    print("General Login:")
+    print("Login Portal:")
     print("http://127.0.0.1:5000/login")
-
     print("")
 
-    print("Admin Login:")
-    print("http://127.0.0.1:5000/admin-login")
-
-    print("")
-
-    print("Customer Sign Up:")
-    print("http://127.0.0.1:5000/customer-signup")
-
+    print("Hidden Admin Login:")
+    print("http://127.0.0.1:5000/oscar-control-2026")
     print("")
 
     print("Customer Login:")
     print("http://127.0.0.1:5000/customer-login")
+    print("")
 
+    print("Customer Signup:")
+    print("http://127.0.0.1:5000/customer-signup")
     print("")
 
     print("Technician Login:")
     print("http://127.0.0.1:5000/technician-login")
-
-    print("")
-
-    print("My Services:")
-    print("http://127.0.0.1:5000/my-services")
-
-    print("")
-
-    print("Contact:")
-    print("http://127.0.0.1:5000/contact")
-
     print("")
 
     print("Track Booking:")
     print("http://127.0.0.1:5000/track-booking")
+    print("")
 
+    print("Admin Dashboard:")
+    print("http://127.0.0.1:5000/dashboard")
     print("")
 
     print("========================================")
+
 
     app.run(
         debug=True

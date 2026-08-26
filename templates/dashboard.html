@@ -447,7 +447,10 @@
      CUSTOMER MANAGEMENT
 ===================================================== -->
 
-<section class="card">
+<section
+    class="card"
+    id="customer-management"
+>
 
     <div class="top-bar">
 
@@ -463,13 +466,6 @@
 
         </div>
 
-
-        <a
-            class="button success"
-            href="{{ url_for('add_customer') }}"
-        >
-            ➕ Add Customer
-        </a>
 
     </div>
 
@@ -591,13 +587,7 @@
         </div>
 
 
-        <a
-            class="button success"
-            href="{{ url_for('add_technician') }}"
-        >
-            ➕ Add Technician
-        </a>
-
+      
     </div>
 
 
@@ -946,11 +936,11 @@
 
 
         <a
-            class="button primary"
-            href="{{ url_for('customers') }}"
-        >
-            👤 Customer Management
-        </a>
+    class="button primary"
+    href="#customer-management"
+>
+    👤 Customer Management
+</a>
 
 
         <a
