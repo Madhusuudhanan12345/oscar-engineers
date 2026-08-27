@@ -1736,13 +1736,19 @@ def internal_error(error):
 
 
 # =========================================================
+# DATABASE INITIALIZATION
+# =========================================================
+
+# Initialize database when Flask starts.
+# This works both locally and on Render/Gunicorn.
+init_database()
+
+
+# =========================================================
 # START APPLICATION
 # =========================================================
 
 if __name__ == "__main__":
-
-    init_database()
-
 
     print("")
     print("========================================")
